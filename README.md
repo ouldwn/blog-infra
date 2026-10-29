@@ -17,7 +17,7 @@
 - **自动化**：mysqldump 备份（--single-transaction + gzip + 7 天保留 + 恢复演练）；Python 巡检（磁盘/内存/容器/HTTP 端到端/备份新鲜度）；PushPlus 微信告警（30min 冷却 + 恢复通知）；certbot webroot 自动续期
 - **Web**：Nginx 反代 + HTTP→HTTPS 301 + Let's Encrypt；静态资源 Nginx 直出；XSS 转义；gunicorn 替代开发服务器；数据库连接 try/finally 归还
 
-## 排错案例集（全部真实踩坑）
+## 排错案例集
 
 | # | 现象 | 定位过程 | 根因 | 修复 |
 |---|------|---------|------|------|
@@ -34,14 +34,14 @@
 | 11 | HTTPS 上线后 http 检查恒为 301 误报 | 看 cron 日志 status 值 | 检查逻辑没跟上架构变更（80 已改跳转） | 检查改走 `https://localhost` + `-k`；**监控要随架构演进** |
 | 12 | XSS：数据库标题被当 HTML 执行 | 插入 `<script>` 实测弹窗 | 输出未转义 | `markupsafe.escape`；同时修复 `with get_db()` 不 close 导致的连接泄漏 |
 
-## 经验沉淀
+## 经验总结
 
 - 排错口诀：**refused=没人听，timeout=被拦了**；本机通外网通不通→查防火墙/安全组；容器内通宿主机不通→查端口映射
 - 备份的铁律：没做过恢复演练的备份等于没有；监控"产物是否产生"而不是"任务是否执行"
 - 告警要冷却+分级，否则三周后必然告警疲劳
 - 配置进仓库、密钥进 .env（gitignore）；改配置先静态校验（compose config / nginx -t / promtool / py_compile）再热生效
 
-## 已知不足（诚实清单）
+## 已知不足
 
 备份与服务器同机（待同步 OSS）；无 CI/CD（手动 build）；单点无冗余；告警仅覆盖 5 项基础指标
 
