@@ -4,6 +4,22 @@ import subprocess, shutil, time, os, glob, json
 import urllib.request
 from datetime import datetime
 
+def load_env():
+    """自己解析 .env，不依赖 shell 的 source 行为"""
+    path = os.path.expanduser("~/blog/.env")
+    if not os.path.exists(path):
+        return
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+load_env()
+
+
 LOG = os.path.expanduser("~/blog/backups/monitor.log")
 STATE = os.path.expanduser("~/blog/backups/monitor.state")
 BACKUP_DIR = os.path.expanduser("~/blog/backups")
