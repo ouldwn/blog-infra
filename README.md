@@ -1,6 +1,6 @@
 # 个人博客系统 · 独立开发与运维
 
-线上地址：https://smzyg.xyz　
+线上地址：https://smzyg.xyz
 技术栈：Ubuntu 22.04 / Docker Compose / Nginx / MySQL 8 / Flask / gunicorn / Prometheus / Grafana / Python
 
 ## 架构
